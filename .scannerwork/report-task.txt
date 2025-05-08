@@ -1,0 +1,6 @@
+projectKey=SME-Project-LMS
+serverUrl=http://localhost:9000
+serverVersion=25.5.0.107428
+dashboardUrl=http://localhost:9000/dashboard?id=SME-Project-LMS
+ceTaskId=5f4b2eae-723e-44a4-aae5-af8ef40e366d
+ceTaskUrl=http://localhost:9000/api/ce/task?id=5f4b2eae-723e-44a4-aae5-af8ef40e366d
