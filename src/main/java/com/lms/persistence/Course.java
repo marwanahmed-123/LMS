@@ -14,6 +14,8 @@ public class Course {
     private int duration;  // Duration in days or hours
     private List<Lesson> lessons = new ArrayList<>();  // List of lessons
     private List<String> mediaPaths = new ArrayList<>();  // List of media file paths or URLs
+    private List<Review> reviews = new ArrayList<>();
+    private double averageRating;
 
     // Constructor, Getters, Setters
     public Course(String id, String title, String description, int duration,String profid) {
@@ -22,6 +24,21 @@ public class Course {
         this.description = description;
         this.duration = duration;
         this.Profid = profid;
+    }
+    public void addReview(Review review) {
+        this.reviews.add(review);
+        updateAverageRating();
+    }
+    private void updateAverageRating() {
+        if (reviews.isEmpty()) {
+            this.averageRating = 0;
+            return;
+        }
+        int total = 0;
+        for (Review review : reviews) {
+            total += review.getRating();
+        }
+        this.averageRating = (double) total / reviews.size();
     }
 
     public void addLesson(Lesson lesson) {

@@ -2,6 +2,7 @@ package com.lms.service;
 
 import com.lms.persistence.Course;
 import com.lms.persistence.Lesson;
+import com.lms.persistence.Review;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -91,4 +92,34 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> getAllCourses() {
         return new ArrayList<>(courseList);
     }
+    @Override
+    public void addReview(String courseId, Review review) {
+        Course course = findCourseById(courseId);
+        if (course != null) {
+            course.addReview(review);
+        } else {
+            throw new RuntimeException("Course not found with ID: " + courseId);
+        }
+    }
+
+    @Override
+    public List<Review> getReviews(String courseId) {
+        Course course = findCourseById(courseId);
+        if (course != null) {
+            return course.getReviews();
+        } else {
+            throw new RuntimeException("Course not found with ID: " + courseId);
+        }
+    }
+
+    @Override
+    public double getAverageRating(String courseId) {
+        Course course = findCourseById(courseId);
+        if (course != null) {
+            return course.getAverageRating();
+        } else {
+            throw new RuntimeException("Course not found with ID: " + courseId);
+        }
+    }
+
 }

@@ -1,8 +1,10 @@
 package com.lms.presentation;
 import com.lms.persistence.UpdateUserDto;
+import com.lms.persistence.UserDashboard;
 import com.lms.persistence.UserInfoDto;
 import com.lms.persistence.User;
 import com.lms.service.AuthenticationService;
+import com.lms.service.DashboardService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import com.lms.service.UserService;
@@ -17,11 +19,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @RestController
 public class UserController {
     private final UserService userService;
+    private final DashboardService dashboardService;
     private final AuthenticationService authenticationService;
 
-    public UserController(UserService userService, AuthenticationService auth) {
+    public UserController(UserService userService,DashboardService dashboardService, AuthenticationService auth) {
         this.userService = userService;
         this.authenticationService=auth;
+        this.dashboardService=dashboardService;
     }
 
     @GetMapping("/me")
@@ -57,6 +61,25 @@ public class UserController {
         );
         return ResponseEntity.ok(accountInfo);
     }
+    @GetMapping("dashboard")
+    public ResponseEntity<?> getUserDashboard() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !(authentication.getPrincipal() instanceof UserDetails)) {
+            return ResponseEntity.status(401).body("Unauthorized: Please log in.");
+        }
+        UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
+        Optional<User> currentUser = userService.findByEmail(currentUserDetails.getUsername());
+        if (currentUser.isEmpty()) {
+            return ResponseEntity.status(404).body("User not found.");
+        }
+        UserDashboard dashboard = dashboardService.getUserDashboard(currentUser.get().getId());
+        if (dashboard != null) {
+            return ResponseEntity.ok(dashboard);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     @PatchMapping("/updateInfo")
     public ResponseEntity<?> updateUser(@RequestBody UpdateUserDto updateUserDto) {

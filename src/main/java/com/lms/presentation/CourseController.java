@@ -4,6 +4,7 @@ import com.lms.events.CourseNotificationEvent;
 import com.lms.events.NotificationEvent;
 import com.lms.persistence.Course;
 import com.lms.persistence.Lesson;
+import com.lms.persistence.Review;
 import com.lms.persistence.User;
 import com.lms.service.AuthenticationService;
 import com.lms.service.CourseService;
@@ -154,6 +155,46 @@ public class CourseController {
 
         return ResponseEntity.ok(courses);
     }
-
+    @PostMapping("/{courseId}/reviews")
+    public ResponseEntity<String> addReview(@PathVariable String courseId, @RequestBody Review review) {
+        try {
+            courseService.addReview(courseId, review);
+            if (review.getRating() > 0 && review.getRating() <= 5) {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
+                Optional<User> currentUser = userService.findByEmail(currentUserDetails.getUsername());
+                if (currentUser.isEmpty()) {
+                    return ResponseEntity.status(404).build();
+                }
+                if (!"Student".equals(currentUser.get().getRole())) {
+                    return ResponseEntity.status(403).body("Access Denied: Access Denied: you are unauthorized");
+                }
+                return ResponseEntity.ok("Review added successfully");
+            }
+            else {
+                throw new RuntimeException("Rating should be between 1 and 5");
+            }
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+    @GetMapping("/{courseId}/reviews")
+    public ResponseEntity<List<Review>> getReviews(@PathVariable String courseId) {
+        try {
+            List<Review> reviews = courseService.getReviews(courseId);
+            return ResponseEntity.ok(reviews);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+    @GetMapping("/{courseId}/average-rating")
+    public ResponseEntity<Double> getAverageRating(@PathVariable String courseId) {
+        try {
+            double average = courseService.getAverageRating(courseId);
+            return ResponseEntity.ok(average);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }
 
