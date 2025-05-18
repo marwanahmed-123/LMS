@@ -1,5 +1,7 @@
 package com.lms.persistence;
+import lombok.Data;
 
+@Data
 public class Enrollment {
  private String eId;
  private String sId;

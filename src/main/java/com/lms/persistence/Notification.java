@@ -1,14 +1,9 @@
 package com.lms.persistence;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Notification {
@@ -17,4 +12,6 @@ public class Notification {
     private String message;
     private boolean isRead = false;
     private LocalDateTime timestamp = LocalDateTime.now();
+    public String getUserId() { return userId; }
+    public boolean isRead() { return isRead; }
 }

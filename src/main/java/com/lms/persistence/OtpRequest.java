@@ -11,5 +11,7 @@ public class OtpRequest {
     private String username;
     private String phoneNumber;
     private String lessonName;
-
+    public String getUsername() { return username; }
+    public String getLessonName() { return lessonName; }
+    public String getPhoneNumber() { return phoneNumber; }
 }
