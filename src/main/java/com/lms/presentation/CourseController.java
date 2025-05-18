@@ -54,7 +54,7 @@ public class CourseController {
 
         String message = "Course " + course.getId() + " \"" + course.getTitle() + "\"" + " created successfully" ;
         eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), message, "EMAIL"));
-        course.setProfid(currentUser.get().getId());
+        course.setProfId(currentUser.get().getId());
         Course newCourse = courseService.createCourse(course);
         return ResponseEntity.ok("Course " + newCourse.getId() + " created successfully!");
     }

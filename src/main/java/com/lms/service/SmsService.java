@@ -1,5 +1,6 @@
 package com.lms.service;
 
+import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -62,9 +63,10 @@ public class SmsService {
         }
     }
 
-    private String generateOTP() {
+    private final SecureRandom secureRandom = new SecureRandom();
+    public String generateOTP() {
         return new DecimalFormat("000000")
-                .format(new Random().nextInt(999999));
+                .format(secureRandom.nextInt(999999));
     }
 
     public static ArrayList<Pair<String, Optional<User>>> viewAttendance() {

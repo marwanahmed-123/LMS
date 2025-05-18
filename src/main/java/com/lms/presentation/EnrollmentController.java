@@ -61,7 +61,7 @@ public class EnrollmentController {
         String studentMessage = "you Enrolled in course " + courseId + " successfully";
         eventPublisher.publishEvent(new NotificationEvent(this, currentUser.get().getId(), studentMessage, "EMAIL"));
         String instructorMessage = "New Student "+ studentId +" Enrolled in course  " + courseId + " \"" + course.getTitle() + "\"";
-        eventPublisher.publishEvent(new NotificationEvent(this, course.getProfid(), instructorMessage, "EMAIL"));
+        eventPublisher.publishEvent(new NotificationEvent(this, course.getProfId(), instructorMessage, "EMAIL"));
 
         return ResponseEntity.ok("Student enrolled successfully");
     }
@@ -74,7 +74,9 @@ public class EnrollmentController {
         if (currentUser.isEmpty()) {
             return ResponseEntity.status(404).build();
         }
-
+        if (!"Instructor".equals(currentUser.get().getRole())) {
+            return ResponseEntity.status(403).body("Access Denied: Access Denied: you are unauthorized");
+        }
 
         List<Enrollment> enrollments = enrollmentService.getEnrollmentsByCourse(courseId);
         return ResponseEntity.ok(enrollments.toString());

@@ -27,7 +27,7 @@ public class DashboardServiceImpl implements DashboardService {
                 course.getTitle(),
                 course.getDescription(),
                 course.getDuration(),
-                course.getProfid()
+                course.getProfId()
             ))
             .collect(Collectors.toList());
         dashboard.setEnrolledCourses(courseSummaries);

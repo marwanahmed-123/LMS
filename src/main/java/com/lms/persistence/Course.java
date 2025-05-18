@@ -7,7 +7,7 @@ import lombok.Data;
 public class Course {
     // Getters and Setters
     private String id;
-    private String Profid;
+    private String profId;
 
     private String title;
     private String description;
@@ -23,7 +23,7 @@ public class Course {
         this.title = title;
         this.description = description;
         this.duration = duration;
-        this.Profid = profid;
+        this.profId = profid;
     }
     public void addReview(Review review) {
         this.reviews.add(review);
@@ -34,11 +34,11 @@ public class Course {
             this.averageRating = 0;
             return;
         }
-        int total = 0;
+        double total = 0;
         for (Review review : reviews) {
             total += review.getRating();
         }
-        this.averageRating = (double) total / reviews.size();
+        this.averageRating = total / reviews.size();
     }
 
     public void addLesson(Lesson lesson) {

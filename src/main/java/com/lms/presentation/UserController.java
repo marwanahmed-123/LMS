@@ -61,7 +61,7 @@ public class UserController {
         );
         return ResponseEntity.ok(accountInfo);
     }
-    @GetMapping("dashboard")
+    @GetMapping("/dashboard")
     public ResponseEntity<?> getUserDashboard() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !(authentication.getPrincipal() instanceof UserDetails)) {
